@@ -1,14 +1,19 @@
 import React, {Component, useEffect, useState} from 'react'
 import './Contribution.css'
 import {ethers} from 'ethers'
+import file from './PPL_CrowdSale.json'
 
 export default function ContributionPage() {   
     const [donation, setDonation] = useState(0);
-    let provider = {}
-    let signer = {}
+    let provider = {};
+    let signer = {};
     let address = ""
+    const saleContractAddress = "0x1E73b6847A224e48b7F3FbC2301F5DFb0eA502a9";
+    let salesContract = {};
+    let realSalesContract = {};
 
-    useEffect(async () => {
+     // Setting up all of the variables
+    (async () => {
         provider = new ethers.providers.Web3Provider(window.ethereum);
         console.log("Provider: ", provider);
         (async () => {
@@ -19,11 +24,23 @@ export default function ContributionPage() {
             console.log("Address of Signer:", addy)
             address = addy;
         })
-    }, [])
-
+        salesContract = new ethers.Contract(saleContractAddress, file.abi, provider);
+        console.log("Contract:", salesContract)
+        realSalesContract = salesContract.connect(signer);
+        console.log("realContract:", realSalesContract);
+    })();
+    
+     
     async function handleSubmit(){
         // Something something transaction with donation
         console.log("FUCKKKKKKKKKKKK")
+        // Transaction Execution
+        const txBuy = await realSalesContract.buyTokens(address, {
+            value: ethers.utils.parseUnits(""+{donation}, "ether"),
+            gasLimit: 3000000,
+        }).then((transaction) => {
+            console.log("Transaction:", transaction);
+        })
         
     }
 
