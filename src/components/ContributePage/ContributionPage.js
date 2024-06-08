@@ -32,8 +32,6 @@ export default function ContributionPage() {
     
      
     async function handleSubmit(){
-        // Something something transaction with donation
-        console.log("FUCKKKKKKKKKKKK")
         // Transaction Execution
         const txBuy = await realSalesContract.buyTokens(address, {
             value: ethers.utils.parseUnits(""+{donation}, "ether"),
